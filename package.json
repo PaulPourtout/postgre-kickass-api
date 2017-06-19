@@ -1,0 +1,25 @@
+{
+  "name": "kickass-starter-api",
+  "version": "1.0.0",
+  "description": "a simple postgreSQL api with projects and users",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PaulPourtout/postgre-kickass-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PaulPourtout/postgre-kickass-api/issues"
+  },
+  "homepage": "https://github.com/PaulPourtout/postgre-kickass-api#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "pg": "^6.2.4"
+  }
+}
