@@ -41,8 +41,10 @@ apiRouter.get('/projects', (req, res) => {
 				console.error(err);
 				response.send("Error " + err);
 			}
-			else
-			{ res.send(result) }
+			else {
+				res.setHeader("Access-Control-Allow-Origin", "*");
+				res.send(result);
+			}
 		});
 	});
 });
