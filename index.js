@@ -41,11 +41,7 @@ apiRouter.get('/users', (req, res) => {
 	db.any('SELECT * FROM users')
 		.then(data => {
 			res.status(200)
-				.json({
-					status: 'success',
-					data: data,
-					message: 'Retrieved all users'
-				});
+				.json(data);
 		})
 		.catch(err => next(err));
 });
@@ -68,11 +64,7 @@ apiRouter.get('/projects', (req, res) => {
 	db.any('SELECT * FROM projects')
 		.then(data => {
 			res.status(200)
-				.json({
-					status: 'success',
-					data: data,
-					message: 'Retrieved all projects'
-				});
+				.json(data);
 		})
 		.catch(err => next(err));
 });
@@ -85,11 +77,7 @@ apiRouter.get('/project', (req, res) => {
 	})
 		.then(data => {
 			res.status(200)
-				.json({
-					status: 'success',
-					data: data,
-					message: 'Retrieved the project'
-				})
+				.json(data)
 		})
 		.catch(err => next(err));
 });
