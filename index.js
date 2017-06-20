@@ -74,7 +74,7 @@ apiRouter.get('/projects', (req, res) => {
 			res.status(200)
 				.json({
 					status: 'success',
-					data: data.data,
+					data: data,
 					message: 'Retrieved all projects'
 				});
 		})
@@ -91,7 +91,7 @@ apiRouter.get('/project', (req, res) => {
 			res.status(200)
 				.json({
 					status: 'success',
-					data: data.data,
+					data: data,
 					message: 'Retrieved the project'
 				})
 		})
