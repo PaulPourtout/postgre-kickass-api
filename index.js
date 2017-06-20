@@ -23,7 +23,7 @@ apiRouter.get('/users', (req, res) => {
 
 			if (err) {
 				console.error(err);
-				response.send("Error " + err);
+				// response.send("Error " + err);
 			}
 			else
 			{ response.send(result) }
