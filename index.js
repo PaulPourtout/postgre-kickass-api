@@ -2,14 +2,23 @@ const express = require('express');
 const pg = require('pg');
 const app = express();
 const PORT = process.env.PORT || 8080;
-
+// Check for environment variables and load them
+const dotenv = require('dotenv');
+dotenv.load();
 
 app.get('/', (req, res) => {
 	res.send('hello');
 });
 
-
 const apiRouter = express();
+
+apiRouter.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, HEAD, PATCH");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	res.header("Access-Control-Max-Age", "3600");
+	next();
+});
 
 apiRouter.get('/', (req, res) => {
 	res.send('you are on a postgres API');
@@ -42,7 +51,6 @@ apiRouter.get('/projects', (req, res) => {
 				response.send("Error " + err);
 			}
 			else {
-				res.setHeader("Access-Control-Allow-Origin", "*");
 				res.send(result);
 			}
 		});
