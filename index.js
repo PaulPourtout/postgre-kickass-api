@@ -74,71 +74,29 @@ apiRouter.get('/projects', (req, res) => {
 			res.status(200)
 				.json({
 					status: 'success',
-					data: data,
+					data: data.data,
 					message: 'Retrieved all projects'
 				});
 		})
 		.catch(err => next(err));
 });
 
-
-
-
-
-
-
-
-
-// // Get all users
-// apiRouter.get('/users', (req, res) => {
-// 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
-// 		client.query('SELECT * FROM users;', function (err, result) {
-// 			done();
-
-// 			if (err) {
-// 				console.error(err);
-// 				res.send("Error " + err);
-// 			}
-// 			else
-// 			{ res.send(result) }
-// 		});
-// 	});
-// });
-// apiRouter.post('/user', (req, res) => {
-// 	const user = req.body;
-
-// 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
-// 		// pg.connect(database, function (err, client, done) {
-// 		client.query('INSERT INTO users VALUES ($1, $2, $3);', [user.name, user.age, user.type], function (err, result) {
-// 			console.log(req.body);
-// 			done();
-
-// 			if (err) {
-// 				console.error(err);
-// 				res.send("Error " + err);
-// 			}
-// 			else
-// 			{ res.send(200) }
-// 		});
-// 	});
-// });
-
-// // Get all projects
-// apiRouter.get('/projects', (req, res) => {
-// 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
-// 		client.query('SELECT * FROM projects;', function (err, result) {
-// 			done();
-
-// 			if (err) {
-// 				console.error(err);
-// 				res.send("Error " + err);
-// 			}
-// 			else {
-// 				res.send(result);
-// 			}
-// 		});
-// 	});
-// });
+apiRouter.get('/project', (req, res) => {
+	db.one({
+		name: 'find-project',
+		text: 'SELECT * FROM projects WHERE _id = $1',
+		values: [req.params.id]
+	})
+		.then(data => {
+			res.status(200)
+				.json({
+					status: 'success',
+					data: data.data,
+					message: 'Retrieved the project'
+				})
+		})
+		.catch(err => next(err));
+});
 
 
 app.use('/api', apiRouter);
