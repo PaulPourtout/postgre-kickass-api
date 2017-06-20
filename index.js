@@ -49,6 +49,7 @@ apiRouter.post('/user', (req, res) => {
 
 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
 		client.query('INSERT INTO users VALUES ($1, $2, $3);', [user.name, user.age, user.type], function (err, result) {
+			console.log(req.body);
 			done();
 
 			if (err) {
