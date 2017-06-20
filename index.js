@@ -37,7 +37,7 @@ apiRouter.get('/users', (req, res) => {
 
 			if (err) {
 				console.error(err);
-				response.send("Error " + err);
+				res.send("Error " + err);
 			}
 			else
 			{ res.send(result) }
@@ -53,10 +53,10 @@ apiRouter.post('/user', (req, res) => {
 
 			if (err) {
 				console.error(err);
-				response.send("Error " + err);
+				res.send("Error " + err);
 			}
 			else
-			{ res.send(result) }
+			{ res.send(200) }
 		});
 	});
 });
@@ -69,7 +69,7 @@ apiRouter.get('/projects', (req, res) => {
 
 			if (err) {
 				console.error(err);
-				response.send("Error " + err);
+				res.send("Error " + err);
 			}
 			else {
 				res.send(result);
