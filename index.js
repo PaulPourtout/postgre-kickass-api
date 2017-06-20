@@ -58,11 +58,7 @@ apiRouter.get('/user/:id', (req, res) => {
 	})
 		.then(data => {
 			res.status(200)
-				.json({
-					status: 'success',
-					data: data.data,
-					message: 'Retrieved the user'
-				})
+				.json()
 		})
 		.catch(err => next(err));
 })
