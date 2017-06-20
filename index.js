@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 8080;
 // const pg = require('pg');
 const promise = require('bluebird');
 
-const pgp = require('pg-promise');
+const pgp = require('pg-promise')();
 const db = pgp(process.env.DATABASE_URL);
 // Check for environment variables and load them
 
