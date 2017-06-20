@@ -75,7 +75,7 @@ apiRouter.get('/projects', (req, res) => {
 		.catch(err => next(err));
 });
 
-apiRouter.get('/project', (req, res) => {
+apiRouter.get('/project/:id', (req, res) => {
 	db.one({
 		name: 'find-project',
 		text: 'SELECT * FROM projects WHERE _id = $1',
