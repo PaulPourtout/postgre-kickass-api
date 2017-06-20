@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 8080;
 
 // const pg = require('pg');
+const promise = require('bluebird');
+
 const pgp = require('pg-promise');
 const db = pgp(process.env.DATABASE_URL);
 // Check for environment variables and load them
@@ -35,7 +37,7 @@ apiRouter.use((req, res, next) => {
 });
 
 
-apiRouter.get('/', (req, res) => {
+apiRouter.get('/users', (req, res) => {
 	db.any('SELECT * FROM users')
 		.then(data => {
 			res.status(200)
