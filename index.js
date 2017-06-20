@@ -50,6 +50,23 @@ apiRouter.get('/users', (req, res) => {
 		.catch(err => next(err));
 });
 
+apiRouter.get('/user/:id', (req, res) => {
+	db.one({
+		name: 'find-user',
+		text: 'SELECT * FROM users WHERE _id = $1',
+		values: [req.params.id]
+	})
+		.then(data => {
+			res.status(200)
+				.json({
+					status: 'success',
+					data: data,
+					message: 'Retrieved the user'
+				})
+		})
+		.catch(err => next(err));
+})
+
 
 apiRouter.get('/projects', (req, res) => {
 	db.any('SELECT * FROM projects')
