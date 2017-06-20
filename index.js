@@ -61,7 +61,7 @@ apiRouter.get('/user/:id', (req, res) => {
 })
 
 apiRouter.post('/user', (req, res) => {
-	db.none('INSERT INTO users VALUES($1, $2, $3)', [req.body.name, req.body.age, req.body.type])
+	db.none('INSERT INTO users VALUES($1, $2, $3, $4)', [nextval('users_id_seq'), req.body.name, req.body.age, req.body.type])
 		.then(data => console.log('New User registered'))
 		.catch(err => console.log('error', err));
 });
