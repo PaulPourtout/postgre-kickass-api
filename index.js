@@ -31,6 +31,22 @@ apiRouter.get('/users', (req, res) => {
 	});
 });
 
+// Get all projects
+apiRouter.get('/projects', (req, res) => {
+	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
+		client.query('SELECT * FROM projects', function (err, result) {
+			done();
+
+			if (err) {
+				console.error(err);
+				response.send("Error " + err);
+			}
+			else
+			{ res.send(result) }
+		});
+	});
+});
+
 
 app.use('/api', apiRouter);
 
