@@ -1,24 +1,19 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 8080;
 
-// const pg = require('pg');
-const promise = require('bluebird');
+const bodyParser = require('body-parser');
 
 const pgp = require('pg-promise')();
 const db = pgp(process.env.DATABASE_URL);
-// Check for environment variables and load them
 
+// Check for environment variables and load them
 const dotenv = require('dotenv');
 dotenv.load();
 
 // create application/json parser 
 const jsonParser = bodyParser.json();
 app.use(bodyParser.json({ type: 'application/json' }));
-
-
-
 
 
 app.get('/', (req, res) => {
