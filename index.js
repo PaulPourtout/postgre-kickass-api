@@ -58,7 +58,7 @@ apiRouter.get('/user/:id', (req, res) => {
 	})
 		.then(data => {
 			res.status(200)
-				.json()
+				.json(data)
 		})
 		.catch(err => next(err));
 })
