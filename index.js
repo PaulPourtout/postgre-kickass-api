@@ -48,8 +48,20 @@ apiRouter.get('/users', (req, res) => {
 				});
 		})
 		.catch(err => next(err));
+});
 
 
+apiRouter.get('/projects', (req, res) => {
+	db.any('SELECT * FROM projects')
+		.then(data => {
+			res.status(200)
+				.json({
+					status: 'success',
+					data: data,
+					message: 'Retrieved all projects'
+				});
+		})
+		.catch(err => next(err));
 });
 
 
