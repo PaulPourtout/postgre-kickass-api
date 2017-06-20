@@ -9,7 +9,7 @@ dotenv.load();
 
 // create application/json parser 
 const jsonParser = bodyParser.json();
-
+app.use(bodyParser.json({ type: 'application/json' }));
 
 app.get('/', (req, res) => {
 	res.send('hello');
