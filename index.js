@@ -15,7 +15,7 @@ dotenv.load();
 const jsonParser = bodyParser.json();
 app.use(bodyParser.json({ type: 'application/json' }));
 
-// const users = require('./server/controllers/users.js');
+const users = require('./server/controllers/users.js');
 
 app.get('/', (req, res) => {
 	res.send('hello');
@@ -34,13 +34,13 @@ apiRouter.use((req, res, next) => {
 
 
 apiRouter.get('/users', (req, res) => {
-	// users.getAllUsers(req, res);
-	db.any('SELECT * FROM users')
-		.then(data => {
-			res.status(200)
-				.json(data);
-		})
-		.catch(err => next(err));
+	users.getAllUsers(req, res);
+	// db.any('SELECT * FROM users')
+	// 	.then(data => {
+	// 		res.status(200)
+	// 			.json(data);
+	// 	})
+	// 	.catch(err => next(err));
 });
 
 
