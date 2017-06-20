@@ -60,7 +60,7 @@ apiRouter.get('/user/:id', (req, res) => {
 			res.status(200)
 				.json({
 					status: 'success',
-					data: data,
+					data: data.data,
 					message: 'Retrieved the user'
 				})
 		})
