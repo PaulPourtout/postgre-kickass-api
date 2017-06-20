@@ -37,9 +37,15 @@ apiRouter.use((req, res, next) => {
 
 apiRouter.get('/', (req, res) => {
 	db.any('SELECT * FROM users')
-		.then(data => data.json())
-		.then(result => result)
-		.catch(err => console.log('error :', err));
+		.then(data => {
+			res.status(200)
+				.json({
+					status: 'success',
+					data: data,
+					message: 'Retrieved all users'
+				});
+		})
+		.catch(err => next(err));
 
 
 });
