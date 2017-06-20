@@ -32,7 +32,7 @@ apiRouter.get('/', (req, res) => {
 // Get all users
 apiRouter.get('/users', (req, res) => {
 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
-		client.query('SELECT * FROM users', function (err, result) {
+		client.query('SELECT * FROM users;', function (err, result) {
 			done();
 
 			if (err) {
@@ -45,10 +45,10 @@ apiRouter.get('/users', (req, res) => {
 	});
 });
 apiRouter.post('/user', (req, res) => {
-	const requestBody = `(nextval('users_id_seq'::regclass), ${req.body.name}, ${req.body.age}, ${req.body.type})`;
+	const user = req.body;
 
 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
-		client.query(`INSERT INTO users VALUES ${requestBody}`, function (err, result) {
+		client.query('INSERT INTO users VALUES ($1, $2, $3);', [user.name, user.age, user.type], function (err, result) {
 			done();
 
 			if (err) {
@@ -64,7 +64,7 @@ apiRouter.post('/user', (req, res) => {
 // Get all projects
 apiRouter.get('/projects', (req, res) => {
 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
-		client.query('SELECT * FROM projects', function (err, result) {
+		client.query('SELECT * FROM projects;', function (err, result) {
 			done();
 
 			if (err) {
