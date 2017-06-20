@@ -1,10 +1,15 @@
 const express = require('express');
 const pg = require('pg');
 const app = express();
+const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 8080;
 // Check for environment variables and load them
 const dotenv = require('dotenv');
 dotenv.load();
+
+// create application/json parser 
+const jsonParser = bodyParser.json();
+
 
 app.get('/', (req, res) => {
 	res.send('hello');
@@ -40,9 +45,10 @@ apiRouter.get('/users', (req, res) => {
 	});
 });
 apiRouter.post('/user', (req, res) => {
-	const requestBody = `${nextval('users_id_seq'::regclass)}, ${req.body.name}, ${req.body.age}, ${req.body.type}`;
+	const requestBody = `(nextval('users_id_seq'::regclass), ${req.body.name}, ${req.body.age}, ${req.body.type})`;
+
 	pg.connect(process.env.DATABASE_URL, function (err, client, done) {
-		client.query(`INSERT INTO users values (${requestBody})`, function (err, result) {
+		client.query(`INSERT INTO users VALUES ${requestBody}`, function (err, result) {
 			done();
 
 			if (err) {
