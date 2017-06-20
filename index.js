@@ -40,6 +40,8 @@ apiRouter.get('/', (req, res) => {
 		.then(data => data.json())
 		.then(result => result)
 		.catch(err => console.log('error :', err));
+
+
 });
 
 
