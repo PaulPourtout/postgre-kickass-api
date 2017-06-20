@@ -46,6 +46,7 @@ apiRouter.get('/users', (req, res) => {
 		.catch(err => next(err));
 });
 
+
 apiRouter.get('/user/:id', (req, res) => {
 	db.one({
 		name: 'find-user',
@@ -59,6 +60,11 @@ apiRouter.get('/user/:id', (req, res) => {
 		.catch(err => next(err));
 })
 
+apiRouter.post('/user', (req, res) => {
+	db.none('INSERT INTO users VALUES($1, $2, $3)', [req.body.name, req.body.age, req.body.type])
+		.then(data => console.log('New User registered'))
+		.catch(err => console.log('error', err));
+});
 
 apiRouter.get('/projects', (req, res) => {
 	db.any('SELECT * FROM projects')
