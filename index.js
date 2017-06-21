@@ -15,7 +15,9 @@ dotenv.load();
 const jsonParser = bodyParser.json();
 app.use(bodyParser.json({ type: 'application/json' }));
 
+// CONTROLLERS
 const users = require('./server/controllers/users.js');
+const projects = require('./server/controllers/projects.js');
 
 app.get('/', (req, res) => {
 	res.send('hello');
@@ -33,29 +35,8 @@ apiRouter.use((req, res, next) => {
 });
 
 
-apiRouter.get('/users', (req, res) => {
-	users.getAllUsers(req, res);
-	// db.any('SELECT * FROM users')
-	// 	.then(data => {
-	// 		res.status(200)
-	// 			.json(data);
-	// 	})
-	// 	.catch(err => next(err));
-});
-
-
-apiRouter.get('/user/:id', (req, res) => {
-	db.one({
-		name: 'find-user',
-		text: 'SELECT * FROM users WHERE _id = $1',
-		values: [req.params.id]
-	})
-		.then(data => {
-			res.status(200)
-				.json(data)
-		})
-		.catch(err => next(err));
-})
+apiRouter.get('/users', (req, res) => users.getAll(req, res));
+apiRouter.get('/user/:id', (req, res) => users.getOne(req, res));
 
 apiRouter.post('/user', (req, res) => {
 	db.none('INSERT INTO users VALUES($1, $2, $3)', [req.body.name, req.body.age, req.body.type])
@@ -63,27 +44,8 @@ apiRouter.post('/user', (req, res) => {
 		.catch(err => console.log('error', err));
 });
 
-apiRouter.get('/projects', (req, res) => {
-	db.any('SELECT * FROM projects')
-		.then(data => {
-			res.status(200)
-				.json(data);
-		})
-		.catch(err => next(err));
-});
-
-apiRouter.get('/project/:id', (req, res) => {
-	db.one({
-		name: 'find-project',
-		text: 'SELECT * FROM projects WHERE _id = $1',
-		values: [req.params.id]
-	})
-		.then(data => {
-			res.status(200)
-				.json(data)
-		})
-		.catch(err => next(err));
-});
+apiRouter.get('/projects', (req, res) => projects.getAll(req, res));
+apiRouter.get('/project/:id', (req, res) => projects.getOne(req, res));
 
 
 app.use('/api', apiRouter);
