@@ -1,14 +1,8 @@
 const express = require('express');
 const app = express();
 
+const { db } = require('../api.js');
 const bodyParser = require('body-parser');
-
-const pgp = require('pg-promise')();
-const db = pgp(process.env.DATABASE_URL);
-
-// Check for environment variables and load them
-const dotenv = require('dotenv');
-dotenv.load();
 
 // create application/json parser 
 const jsonParser = bodyParser.json();
