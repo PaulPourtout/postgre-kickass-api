@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-
+const pgp = require('pg-promise')();
 const { db } = require('../api.js');
 const bodyParser = require('body-parser');
 
@@ -18,9 +18,6 @@ app.use(bodyParser.json({ type: 'application/json' }));
 
 
 const users = {
-	coucou: (req, res) => {
-		res.send('db : ' + db);
-	},
 	getAll: (req, res) => {
 		db.any('SELECT * FROM users')
 			.then(data => {
