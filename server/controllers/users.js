@@ -1,48 +1,74 @@
-const express = require('express');
-const app = express();
-const pgp = require('pg-promise')();
-const { db } = require('../api.js');
-const bodyParser = require('body-parser');
+module.exports = (db) => {
+	const users = {
 
-// const pgp = require('pg-promise')();
-// const db = pgp(process.env.DATABASE_URL);
+		getAll: (req, res) => {
+			db.any('SELECT * FROM users')
+				.then(data => {
+					res.status(200)
+						.json(data);
+				})
+				.catch(err => next(err));
+		},
 
-// // Check for environment variables and load them
-// const dotenv = require('dotenv');
-// dotenv.load();
-
-// create application/json parser 
-const jsonParser = bodyParser.json();
-app.use(bodyParser.json({ type: 'application/json' }));
-
-
-
-const users = {
-	getAll: (req, res) => {
-		db.any('SELECT * FROM users')
-			.then(data => {
-				res.status(200)
-					.json(data);
+		getOne: (req, res) => {
+			db.one({
+				name: 'find-user',
+				text: 'SELECT * FROM users WHERE _id = $1',
+				values: [req.params.id]
 			})
-			.catch(err => next(err));
-	},
-	getOne: (req, res) => {
-		db.one({
-			name: 'find-user',
-			text: 'SELECT * FROM users WHERE _id = $1',
-			values: [req.params.id]
-		})
-			.then(data => {
-				res.status(200)
-					.json(data)
+				.then(data => {
+					res.status(200)
+						.json(data)
+				})
+				.catch(err => next(err));
+		},
+
+		addOne: (req, res) => {
+			const { name, age, type } = req.body;
+
+			db.one('INSERT INTO users(name, age, type) VALUES($1, $2, $3) RETURNING *', [name, age, type])
+				.then(data => console.log('New User registered ', data))
+				.catch(err => console.log('error', err));
+		},
+
+		updateOne: (req, res) => {
+			const { name, age, type } = req.body;
+			const { id } = req.params;
+
+			db.none('UPDATE users SET name=($1), age=($2), type=($3) where _id=($4)', [name, age, type, id])
+				.then(data => console.log('User updated'))
+				.catch(err => console.log('error', err));
+		},
+
+		deleteOne: (req, res) => {
+			db.one({
+				name: 'delete-user',
+				text: 'DELETE FROM users WHERE _id = $1 RETURNING *',
+				values: [req.params.id]
 			})
-			.catch(err => next(err));
-	},
-	createNew: (req, res) => {
-		db.none('INSERT INTO users VALUES($1, $2, $3)', [req.body.name, req.body.age, req.body.type])
-			.then(data => console.log('New User registered'))
-			.catch(err => console.log('error', err));
-	},
+				.then(data => {
+					console.log('user deleted', data);
+					res.status(200)
+						.json(data);
+				})
+				.catch(err => console.log('error', err));
+		},
+
+		getUserProjects: (req, res) => {
+			db.any(`SELECT users._id AS user_id,
+										projects._id AS _id,
+										users.name,
+										projects.title
+										FROM users INNER JOIN projects ON (users._id = projects._creator) 
+										WHERE _creator = $1`,
+				[req.params.id])
+				.then(data => {
+					res.status(200)
+						.json(data);
+				})
+				.catch(err => console.log('error', err));
+		},
+	}
+
+	return users;
 }
-
-module.exports = users;

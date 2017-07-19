@@ -1,36 +1,75 @@
-const express = require('express');
-const app = express();
-const pgp = require('pg-promise')();
-const { db } = require('../api.js');
-const bodyParser = require('body-parser');
+module.exports = (db) => {
+	const projects = {
 
-// create application/json parser 
-const jsonParser = bodyParser.json();
-app.use(bodyParser.json({ type: 'application/json' }));
+		getAll: (req, res) => {
+			db.any('SELECT * FROM projects')
+				.then(data => {
+					res.status(200)
+						.json(data);
+				})
+				.catch(err => next(err));
+		},
 
+		// db.any(`SELECT users._id AS user_id,
+		// 								projects._id AS _id,
+		// 								users.name,
+		// 								projects.title
+		// 								FROM users INNER JOIN projects ON (users._id = projects._creator) 
+		// 								WHERE _creator = $1`,
 
-
-const projects = {
-	getAll: (req, res) => {
-		db.any('SELECT * FROM projects')
-			.then(data => {
-				res.status(200)
-					.json(data);
+		getOne: (req, res) => {
+			db.one({
+				name: 'find-project',
+				// text: 'SELECT * FROM projects WHERE _id = $1',
+				text: `SELECT projects._id AS _id,
+											users._id AS user_id,
+											projects.title,
+											projects.description,
+											users.name
+											FROM projects INNER JOIN users ON (projects._creator = users._id) 
+											WHERE projects._id = $1`,
+				values: [req.params.id]
 			})
-			.catch(err => next(err));
-	},
-	getOne: (req, res) => {
-		db.one({
-			name: 'find-project',
-			text: 'SELECT * FROM projects WHERE _id = $1',
-			values: [req.params.id]
-		})
-			.then(data => {
-				res.status(200)
-					.json(data)
+				.then(data => {
+					res.status(200)
+						.json(data)
+				})
+				.catch(err => next(err));
+		},
+
+		addOne: (req, res) => {
+			db.none('INSERT INTO projects(title, description, _creator) VALUES($1, $2, $3)',
+				[req.body.title, req.body.description, req.body._creator])
+				.then(data => {
+					console.log('New project registered', data);
+					res.status(200)
+						.json(data);
+				})
+				.catch(err => console.log('error', err));
+		},
+
+		updateOne: (req, res) => {
+			console.log(req.body);
+
+			db.none('UPDATE projects SET title=($1), description=($2), _creator=($3) WHERE _id=($4)', [req.body.title, req.body.description, req.body._creator, req.params.id])
+				.then(data => console.log('Project updated'))
+				.catch(err => console.log('error', err));
+		},
+
+		deleteOne: (req, res) => {
+			db.one({
+				name: 'delete-project',
+				text: 'DELETE FROM projects WHERE _id = $1',
+				values: [req.params.id]
 			})
-			.catch(err => next(err));
+				.then(data => {
+					console.log('project deleted', data);
+					res.status(200)
+						.json(data);
+				})
+				.catch(err => console.log('error', err));
+		},
 	}
-}
 
-module.exports = projects;
+	return projects;
+}
