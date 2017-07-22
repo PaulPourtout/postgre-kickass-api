@@ -27,7 +27,10 @@ module.exports = (db) => {
 			const { name, age, type } = req.body;
 
 			db.one('INSERT INTO users(name, age, type) VALUES($1, $2, $3) RETURNING *', [name, age, type])
-				.then(data => console.log('New User registered ', data))
+				.then(data => {
+					console.log('New User registered ', data);
+					res.json(data);
+				})
 				.catch(err => console.log('error', err));
 		},
 
@@ -36,7 +39,10 @@ module.exports = (db) => {
 			const { id } = req.params;
 
 			db.none('UPDATE users SET name=($1), age=($2), type=($3) where _id=($4)', [name, age, type, id])
-				.then(data => console.log('User updated'))
+				.then(data => {
+					console.log('User updated');
+					res.json(data);
+				})
 				.catch(err => console.log('error', err));
 		},
 
