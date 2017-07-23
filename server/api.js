@@ -1,7 +1,7 @@
 const express = require('express');
 const apiRouter = express();
 const bcrypt = require('bcrypt');
-const passport = require('./auth/local');
+const passport = require('./auth/passport.js');
 
 const db = require('./database');
 
@@ -23,31 +23,28 @@ apiRouter.get('/signup', (req, res) => {
 	res.send('signup page');
 });
 
-apiRouter.post('/signup', (req, res) => {
-	const { name, age, email, password } = req.body;
+// apiRouter.post('/signup', (req, res) => {
+// 	const { name, age, email, password } = req.body;
 
-	const salt = bcrypt.genSaltSync(10);
-	const passwordHashed = bcrypt.hashSync(password, salt)
+// 	const salt = bcrypt.genSaltSync(10);
+// 	const passwordHashed = bcrypt.hashSync(password, salt)
 
-	db.one('INSERT INTO users(name, age, email, password) VALUES($1, $2, $3, $4 ) RETURNING *', [name, age, email, passwordHashed])
-		.then(user => {
-			passport.authenticate('local', {
-				successFlash: 'Well done',
-				failureFlash: 'Try again'
-			})
-		})
-		.catch(err => console.log('error', err));
-});
+// 	db.one('INSERT INTO users(name, age, email, password) VALUES($1, $2, $3, $4 ) RETURNING *', [name, age, email, passwordHashed])
+// 		.then(user => {
+// 			passport.authenticate('login', {
+// 				successFlash: 'Well done',
+// 				failureFlash: 'Try again'
+// 			})
+// 		})
+// 		.catch(err => console.log('error', err));
+// });
+apiRouter.post('/signup', passport.authenticate('signup'), (req, res) => {
+	res.send('added and connected !');
+})
 
 // signin
-apiRouter.post('/signin', (req, res, next) => {
-	const { email, password } = req.body;
-
-	console.log('coucou');
-
-	passport.authenticate('local', {
-		if(user) { res.send('success'); }
-	})(email, password, next);
+apiRouter.post('/signin', passport.authenticate('login'), (req, res) => {
+	res.send('ouiiiii');
 });
 
 
