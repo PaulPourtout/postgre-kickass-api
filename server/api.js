@@ -1,5 +1,9 @@
 const express = require('express');
 const apiRouter = express();
+const bcrypt = require('bcrypt');
+const passport = require('./auth/local');
+
+const db = require('./database');
 
 // CONTROLLERS
 const controllers = require('./controllers');
@@ -13,6 +17,38 @@ apiRouter.post('/user', (req, res) => users.addOne(req, res));
 apiRouter.put('/user/:id', (req, res) => users.updateOne(req, res));
 apiRouter.delete('/user/:id', (req, res) => users.deleteOne(req, res));
 apiRouter.get('/user/:id/projects', (req, res) => users.getUserProjects(req, res));
+
+// signup
+apiRouter.get('/signup', (req, res) => {
+	res.send('signup page');
+});
+
+apiRouter.post('/signup', (req, res) => {
+	const { name, age, email, password } = req.body;
+
+	const salt = bcrypt.genSaltSync(10);
+	const passwordHashed = bcrypt.hashSync(password, salt)
+
+	db.one('INSERT INTO users(name, age, email, password) VALUES($1, $2, $3, $4 ) RETURNING *', [name, age, email, passwordHashed])
+		.then(user => {
+			passport.authenticate('local', {
+				successFlash: 'Well done',
+				failureFlash: 'Try again'
+			})
+		})
+		.catch(err => console.log('error', err));
+});
+
+// signin
+apiRouter.post('/signin', (req, res, next) => {
+	const { email, password } = req.body;
+
+	console.log('coucou');
+
+	passport.authenticate('local', {
+		if(user) { res.send('success'); }
+	})(email, password, next);
+});
 
 
 // Projects routes

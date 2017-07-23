@@ -11,8 +11,6 @@ const connection = {
 	user: 'postgres',
 	password: 'postgres'
 };
-// const connection = process.env.DATABASE_URL;
 const db = pgp(connection);
-
 
 module.exports = db;

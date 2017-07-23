@@ -24,9 +24,13 @@ module.exports = (db) => {
 		},
 
 		addOne: (req, res) => {
-			const { name, age, type } = req.body;
+			const { name, age, type, password } = req.body;
 
-			db.one('INSERT INTO users(name, age, type) VALUES($1, $2, $3) RETURNING *', [name, age, type])
+			const salt = bcrypt.genSaltSync(10);
+
+			const passwordHashed = bcrypt.hashSync(password, salt)
+
+			db.one('INSERT INTO users(name, age, type, password) VALUES($1, $2, $3) RETURNING *', [name, age, type])
 				.then(data => {
 					console.log('New User registered ', data);
 					res.json(data);

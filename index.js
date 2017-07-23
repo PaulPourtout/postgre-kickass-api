@@ -1,12 +1,21 @@
 const express = require('express');
 const app = express();
-const cookieParser = require('cookie-parser');
-const passport = require('passport');
-const path = require('path');
+
+
+// Middlewares
 const flash = require('express-flash');
 const session = require('express-session');
-const PORT = process.env.PORT || 8080;
+const path = require('path');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+
+const PORT = process.env.PORT || 8080;
+
+// API
 const apiRouter = require('./server/api.js');
 
 
@@ -14,16 +23,19 @@ app.use(cookieParser());
 app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
-
+app.use(logger('dev'));
 app.use(session({
 	secret: process.env.SECRET_KEY,
 	resave: false,
-	saveUninitialized: true
+	saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(express.static(path.join(__dirname, '..', '..', 'client')));
+
+
+
 
 // Set headers for responses
 app.use((req, res, next) => {

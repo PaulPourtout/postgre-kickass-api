@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/PaulPourtout/postgre-kickass-api#readme",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
     "dotenv": "^4.0.0",
@@ -27,11 +28,14 @@
     "express-session": "^1.15.3",
     "fs": "0.0.1-security",
     "jsonp": "^0.2.1",
+    "knex": "^0.13.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
+    "pg": "^7.0.2",
     "pg-promise": "^5.9.3"
   },
   "devDependencies": {
+    "morgan": "^1.8.2",
     "nodemon": "^1.11.0"
   }
 }
